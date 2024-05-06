@@ -1,0 +1,6 @@
+@UserBlock_HostAddress = http://localhost:5259
+
+GET {{UserBlock_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

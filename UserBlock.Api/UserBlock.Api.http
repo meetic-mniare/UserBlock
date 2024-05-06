@@ -1,0 +1,6 @@
+@UserBlock.Api_HostAddress = http://localhost:5179
+
+GET {{UserBlock.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
