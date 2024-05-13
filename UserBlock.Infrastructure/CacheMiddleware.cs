@@ -1,3 +1,6 @@
+using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
+
 namespace UserBlock.Infrastructure;
 
 using Microsoft.AspNetCore.Http;
@@ -10,18 +13,20 @@ public class CacheMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly IMemoryCache _cache;
+    private readonly IConfiguration _configuration;
 
-    public CacheMiddleware(RequestDelegate next, IMemoryCache cache)
+    public CacheMiddleware(RequestDelegate next, IMemoryCache cache, IConfiguration configuration)
     {
         _next = next;
         _cache = cache;
+        _configuration = configuration;
     }
 
     public async Task Invoke(HttpContext context)
     {
         if (context.Request.Method.Equals("GET", StringComparison.OrdinalIgnoreCase))
         {
-            var cacheKey = context.Request.Path;
+            var cacheKey = context.Request.Path + "/" + context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!_cache.TryGetValue(cacheKey, out string cachedResponse))
             {
                 var originalBodyStream = context.Response.Body;
@@ -34,7 +39,9 @@ public class CacheMiddleware
                     context.Response.Body.Seek(0, SeekOrigin.Begin);
                     await responseBody.CopyToAsync(originalBodyStream);
                 }
-                _cache.Set(cacheKey, cachedResponse, TimeSpan.FromMinutes(10)); // Cache for 10 minutes
+
+                var cacheTimeoutInMinutes = _configuration.GetValue<int>("CacheTimeoutInMinutes");
+                _cache.Set(cacheKey, cachedResponse, TimeSpan.FromMinutes(cacheTimeoutInMinutes));
             }
             else
             {
@@ -42,7 +49,8 @@ public class CacheMiddleware
                 await context.Response.WriteAsync(cachedResponse);
             }
         }
-        else if (context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase) || context.Request.Method.Equals("DELETE", StringComparison.OrdinalIgnoreCase))
+        else if (context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase) ||
+                 context.Request.Method.Equals("DELETE", StringComparison.OrdinalIgnoreCase))
         {
             await _next(context);
             // Invalidate cache for the corresponding route
