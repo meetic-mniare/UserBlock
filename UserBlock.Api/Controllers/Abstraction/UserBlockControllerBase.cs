@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 
-namespace UserBlock.Api.Controllers;
+namespace UserBlock.Api.Controllers.Abstraction;
 
 public class UserBlockControllerBase : ControllerBase
 {
@@ -15,4 +15,5 @@ public class UserBlockControllerBase : ControllerBase
                 : throw new ArgumentNullException("userId");
         }
     }
+    
 }

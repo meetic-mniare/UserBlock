@@ -11,7 +11,10 @@ public static class InfrastructureConfiguration
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddDbContext<UserDbContext>(options =>
-            options.UseInMemoryDatabase(databaseName: "MyInMemoryDatabase"));
+            {
+                options.UseInMemoryDatabase(databaseName: "UserDb");
+            }
+        );
         return services;
     }
 }

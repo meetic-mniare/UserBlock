@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using UserBlock.Application.Interfaces;
 using UserBlock.Contracts;
+using UserBlock.Domain;
 
 namespace UserBlock.Infrastructure;
 
@@ -10,34 +11,46 @@ public class UserRepository : IUserRepository
 
     public UserRepository(UserDbContext dbContext)
     {
+        var initialUsers = new List<User>
+        {
+            new User(Guid.NewGuid(), "user1", BCrypt.Net.BCrypt.HashPassword("password1"), "user1@gmail.com",
+                []),
+            new User(Guid.NewGuid(), "user2", BCrypt.Net.BCrypt.HashPassword("password2"), "user2@gmail.com",
+                [])
+        };
+        dbContext.Users.AddRange(initialUsers);
+        dbContext.SaveChanges();
+
         _dbContext = dbContext;
     }
 
     public async Task<UserDto?> GetUser(string username)
     {
-        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
         return user.ToUserDto();
     }
 
-    public async Task<IList<Guid>> GetBlockedUsers(string username)
+    public async Task<UserDto?> GetUser(Guid userId)
     {
-        var user = await GetUser(username);
-        return user?.BlockedUsers ?? [];
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        return user.ToUserDto();
     }
 
-    public async Task<bool> BlockUser(string username, string blokedUsername)
+    public async Task<UserDto?> BlockUser(Guid userId, string userName)
     {
         try
         {
-            var user = await GetUser(username);
-            var blockedUser = await GetUser(blokedUsername);
+            var user = await GetUser(userId);
+            var blockedUser = await GetUser(userName);
             if (user == null || blockedUser == null)
             {
-                return false;
+                return null;
             }
+
             user.BlockedUsers?.Add(blockedUser.Id);
-            _dbContext.Users.Update(user.ToEntity()!);
-            return await _dbContext.SaveChangesAsync() > 0;
+            // _dbContext.Users.Update(user.ToEntity()!);
+            await _dbContext.SaveChangesAsync();
+            return user;
         }
         catch (Exception e)
         {
@@ -46,16 +59,18 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public async Task<bool> DeleteBlock(string username, string? blokedUsername)
+    public async Task<UserDto?> DeleteBlock(Guid userId, string blockedUSername)
     {
-        var user = await GetUser(username);
-        var blockedUser = await GetUser(blokedUsername!);
+        var user = await GetUser(userId);
+        var blockedUser = await GetUser(blockedUSername);
         if (user == null || blockedUser == null)
         {
-            return false;
+            return null;
         }
+
         user.BlockedUsers?.Remove(blockedUser.Id);
-        _dbContext.Users.Update(user.ToEntity()!);
-        return await _dbContext.SaveChangesAsync() > 0;
+        // _dbContext.Users.Update(user.ToEntity()!);
+        await _dbContext.SaveChangesAsync();
+        return user;
     }
 }

@@ -4,11 +4,10 @@ namespace UserBlock.Application.Interfaces;
 
 public interface IUserRepository
 {
-    Task<UserDto?> GetUser(string username);
+    Task<UserDto?> GetUser(Guid userId);
 
-    Task<IList<Guid>> GetBlockedUsers(string username);
+    Task<UserDto?> BlockUser(Guid userId, string blokedUsername);
 
-    Task<bool> BlockUser(string username, string blokedUsername);
-
-    Task<bool> DeleteBlock(string username, string blokedUsername);
+    Task<UserDto?> DeleteBlock(Guid userId, string blockedUSername);
+    Task<UserDto?> GetUser(string userId);
 }

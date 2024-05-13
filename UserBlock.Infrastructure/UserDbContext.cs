@@ -10,13 +10,9 @@ public class UserDbContext : DbContext
     {
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        modelBuilder.Entity<User>().HasData(
-            new User(Guid.NewGuid(), "user1", BCrypt.Net.BCrypt.HashPassword("password1"), "user1@gmail.com",
-                []),
-            new User(Guid.NewGuid(), "user2", BCrypt.Net.BCrypt.HashPassword("password2"), "user2@gmail.com",
-                []));
+        optionsBuilder.UseInMemoryDatabase(databaseName: "UserDb");
     }
 
     public DbSet<User> Users { get; set; }

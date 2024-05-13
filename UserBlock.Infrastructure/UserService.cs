@@ -5,6 +5,13 @@ namespace UserBlock.Infrastructure;
 
 public sealed class UserService(IUserRepository userRepository) : IUserService
 {
+    public Task<UserDto?> GetUser(Guid? userId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        return userRepository.GetUser(userId.Value);
+    }
+
     public Task<UserDto?> GetUser(string? username)
     {
         ArgumentNullException.ThrowIfNull(username);
@@ -12,27 +19,23 @@ public sealed class UserService(IUserRepository userRepository) : IUserService
         return userRepository.GetUser(username);
     }
     
-    public Task<IList<Guid>> GetBlockedUsers(string? username)
+    public Task<UserDto?> BlockUser(Guid? userId, string? username)
     {
+        ArgumentNullException.ThrowIfNull(userId);
         ArgumentNullException.ThrowIfNull(username);
 
-        return userRepository.GetBlockedUsers(username);
+        return userRepository.BlockUser(userId.Value, username);
     }
-    
-    public Task<bool> BlockUser(string? username, string? blokedUsername)
+
+    public Task<UserDto?> DeleteBlock(Guid? userId, string? blokedUsername)
     {
-        ArgumentNullException.ThrowIfNull(username);
+        ArgumentNullException.ThrowIfNull(userId);
         ArgumentNullException.ThrowIfNull(blokedUsername);
 
-        return userRepository.BlockUser(username, blokedUsername);
+        return userRepository.DeleteBlock(userId.Value, blokedUsername);
     }
+    
 
-    public Task<bool> DeleteBlock(string? username, string? blokedUsername)
-    {
-        ArgumentNullException.ThrowIfNull(username);
-
-        return userRepository.DeleteBlock(username, blokedUsername!);
-    }
     public bool IsAuthenticated(string? password, string? passwordHash)
     {
         ArgumentNullException.ThrowIfNull(password);
