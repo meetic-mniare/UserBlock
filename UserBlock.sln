@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserBlock.Infrastructure", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserBlock.Domain", "UserBlock.Domain\UserBlock.Domain.csproj", "{C2D5DB68-AD49-4D3C-B345-946BDA42E003}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{190DCE9C-BF1E-4EC4-89AB-B92DB0F2D456}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserBlock.IntegrationTest", "UserBlock.IntegrationTest\UserBlock.IntegrationTest.csproj", "{0247AB72-FA27-4900-A684-EDE1E5E9ED9E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +40,12 @@ Global
 		{C2D5DB68-AD49-4D3C-B345-946BDA42E003}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2D5DB68-AD49-4D3C-B345-946BDA42E003}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2D5DB68-AD49-4D3C-B345-946BDA42E003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0247AB72-FA27-4900-A684-EDE1E5E9ED9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0247AB72-FA27-4900-A684-EDE1E5E9ED9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0247AB72-FA27-4900-A684-EDE1E5E9ED9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0247AB72-FA27-4900-A684-EDE1E5E9ED9E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0247AB72-FA27-4900-A684-EDE1E5E9ED9E} = {190DCE9C-BF1E-4EC4-89AB-B92DB0F2D456}
 	EndGlobalSection
 EndGlobal

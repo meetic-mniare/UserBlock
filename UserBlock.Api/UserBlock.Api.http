@@ -1,6 +1,9 @@
 @UserBlock.Api_HostAddress = http://localhost:5179
 
-GET {{UserBlock.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+POST  {{UserBlock.Api_HostAddress}}/userblock/blockuser
+Content-Type: application/json
 
+{
+  "UserId": "D336CA26-D178-40DE-97C4-DAE88E259642"
+}
 ###
