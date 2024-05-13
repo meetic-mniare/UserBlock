@@ -15,6 +15,7 @@ public static class InfrastructureConfiguration
                 options.UseInMemoryDatabase(databaseName: "UserDb");
             }
         );
+        services.AddMemoryCache();
         return services;
     }
 }

@@ -139,7 +139,7 @@ public class UserBlockTest
 
 
     [Test]
-    [Ignore("Manual test to ensure context is up to date")]
+    // [Ignore("Manual test to ensure context is up to date")]
     public async Task Delete_AuthenticatedUserAndValidUserToBlock_ReturnsOk()
     {
         var token = await GenerateToken();
