@@ -21,10 +21,16 @@ public class AuthController : ControllerBase
     
     [HttpPost]
     [Route("token")]
-    public IActionResult Token([FromBody] UserInfo user)
+    public async Task<IActionResult> Token([FromBody] UserInfo user)
     {
-        var storedUser = _userService.GetUser(user?.Username);
-        if (!_userService.IsAuthenticated(user?.Password, storedUser?.PasswordHash))
+        var storedUser = await _userService.GetUser(user?.Username);
+
+        if (storedUser == null)
+        {
+            return Unauthorized("Unable to retrieve  user with username " + user?.Username);
+        }
+        
+        if (!_userService.IsAuthenticated(user?.Password, storedUser.PasswordHash))
         {
             return Unauthorized();
         }

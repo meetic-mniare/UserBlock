@@ -6,4 +6,16 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\UserBlock.Application\UserBlock.Application.csproj" />
+      <ProjectReference Include="..\UserBlock.Contracts\UserBlock.Contracts.csproj" />
+      <ProjectReference Include="..\UserBlock.Domain\UserBlock.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

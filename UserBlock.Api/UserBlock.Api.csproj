@@ -20,6 +20,7 @@
     <ItemGroup>
       <ProjectReference Include="..\UserBlock.Application\UserBlock.Application.csproj" />
       <ProjectReference Include="..\UserBlock.Contracts\UserBlock.Contracts.csproj" />
+      <ProjectReference Include="..\UserBlock.Infrastructure\UserBlock.Infrastructure.csproj" />
     </ItemGroup>
     
     <ItemGroup>

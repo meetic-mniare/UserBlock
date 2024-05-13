@@ -6,12 +6,10 @@ namespace UserBlock.Application;
 
 public static class ApplicationConfiguration
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services,
-        ConfigurationManager configurationManager)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
 
         services.AddTransient<IJwtService, JwtService>();
-        services.AddTransient<IUserService, UserService>();
         return services;
     }
 }
