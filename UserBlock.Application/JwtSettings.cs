@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace UserBlock.Application;
 
 public class JwtSettings
