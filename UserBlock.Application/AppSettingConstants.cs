@@ -1,6 +1,7 @@
 namespace UserBlock.Application;
 
-public class AppSettingConstants
+public static class AppSettingConstants
 {
     public const string JwtSetting = "JwtSettings";
+    public const string CacheTimeoutInMinutes = "CacheTimeoutInMinutes";
 }

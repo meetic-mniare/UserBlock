@@ -1,6 +1,6 @@
 namespace UserBlock.Contracts;
 
-public struct Token
+public struct JwtToken
 {
     public  string Value { get; set; }
 }

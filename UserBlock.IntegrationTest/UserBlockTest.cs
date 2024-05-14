@@ -188,7 +188,7 @@ public class UserBlockTest
             jsonContent);
         if (!tokenResult.IsSuccessStatusCode) return null;
 
-        var token = JsonConvert.DeserializeObject<Token>(await tokenResult.Content.ReadAsStringAsync());
+        var token = JsonConvert.DeserializeObject<JwtToken>(await tokenResult.Content.ReadAsStringAsync());
         return token.Value;
     }
 }

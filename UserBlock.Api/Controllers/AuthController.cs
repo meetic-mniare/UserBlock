@@ -27,6 +27,6 @@ public class AuthController(IUserService userService, IJwtService jwtService) : 
         }
         
         var tokenString = jwtService.GenerateJwtToken(storedUser);
-        return Ok(new  Token{ Value = tokenString });
+        return Ok(new  JwtToken{ Value = tokenString });
     }
 }

@@ -8,15 +8,10 @@ using UserBlock.Contracts;
 
 namespace UserBlock.Application;
 
-public sealed class JwtService : IJwtService
+public sealed class JwtService(IOptions<JwtSettings> jwtSettings) : IJwtService
 {
-    private readonly JwtSettings _jwtSettings;
+    private readonly JwtSettings _jwtSettings = jwtSettings.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
 
-    public JwtService(IOptions<JwtSettings> jwtSettings)
-    {
-        _jwtSettings = jwtSettings.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
-    }
-    
     public string GenerateJwtToken(UserDto? user = null)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key!));

@@ -9,19 +9,12 @@ namespace UserBlock.Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/userBlock")]
-public class UserBlockController : UserBlockControllerBase
+public class UserBlockController(IUserService userService) : UserBlockControllerBase
 {
-    private readonly IUserService _userService;
-
-    public UserBlockController(IUserService userService)
-    {
-        _userService = userService;
-    }
-
     [HttpGet("GetUser")]
     public async Task<IActionResult> GetUser()
     {
-        var user = await _userService.GetUser(CurrentUserId);
+        var user = await userService.GetUser(CurrentUserId);
         if (user == null)
         {
             return NotFound();
@@ -34,7 +27,7 @@ public class UserBlockController : UserBlockControllerBase
     [Route("BlockUser")]
     public async Task<IActionResult> BlockUser([FromBody] UserInfo user)
     {
-        var result = await _userService.BlockUser(CurrentUserId, user.Username!);
+        var result = await userService.BlockUser(CurrentUserId, user.Username!);
 
         return result != null ? Ok(result) : new BadRequestResult();
     }
@@ -43,7 +36,7 @@ public class UserBlockController : UserBlockControllerBase
     [Route("UnblockUser")]
     public async Task<IActionResult> UnblockUser([FromBody] UserInfo user)
     {
-        var result = await _userService.DeleteBlock(CurrentUserId, user.Username!);
+        var result = await userService.DeleteBlock(CurrentUserId, user.Username!);
 
         return result != null ? Ok(result) : new BadRequestResult();
     }
