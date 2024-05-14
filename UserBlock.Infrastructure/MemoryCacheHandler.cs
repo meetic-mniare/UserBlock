@@ -12,11 +12,14 @@ using System.Threading.Tasks;
 
 public class MemoryCacheHandler(RequestDelegate next, IMemoryCache cache, IConfiguration configuration)
 {
+    private const string CacheKeyPrefix = "UserId_";
+
     public async Task Invoke(HttpContext context)
     {
+        var cacheKey = CacheKeyPrefix + context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
         if (context.Request.Method.Equals("GET", StringComparison.OrdinalIgnoreCase))
         {
-            var cacheKey = context.Request.Path + "/" + context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!cache.TryGetValue(cacheKey, out string? cachedResponse))
             {
                 var originalBodyStream = context.Response.Body;
@@ -30,8 +33,8 @@ public class MemoryCacheHandler(RequestDelegate next, IMemoryCache cache, IConfi
                     await responseBody.CopyToAsync(originalBodyStream);
                 }
 
-                cache.Set(cacheKey, cachedResponse,
-                    TimeSpan.FromMinutes(configuration.GetValue<int>(AppSettingConstants.CacheTimeoutInMinutes)));
+                var cacheTimeoutInMinute = configuration.GetValue<double>(AppSettingConstants.CacheTimeoutInMinutes);
+                cache.Set(cacheKey, cachedResponse, TimeSpan.FromMinutes(cacheTimeoutInMinute));
             }
             else
             {
@@ -43,7 +46,7 @@ public class MemoryCacheHandler(RequestDelegate next, IMemoryCache cache, IConfi
                  context.Request.Method.Equals("DELETE", StringComparison.OrdinalIgnoreCase))
         {
             await next(context);
-            cache.Remove(context.Request.Path + "/" + context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            cache.Remove(cacheKey);
         }
         else
         {

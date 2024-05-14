@@ -20,7 +20,7 @@ public class UserBlockController(IUserService userService) : UserBlockController
             return NotFound();
         }
 
-        return Ok(user);
+        return Ok(new UserResponse(user, DateTime.UtcNow));
     }
 
     [HttpPost]
@@ -29,7 +29,9 @@ public class UserBlockController(IUserService userService) : UserBlockController
     {
         var result = await userService.BlockUser(CurrentUserId, user.Username!);
 
-        return result != null ? Ok(result) : new BadRequestResult();
+        return result != null
+            ? Ok(new UserResponse(result, DateTime.UtcNow))
+            : new BadRequestResult();
     }
 
     [HttpDelete]
@@ -38,6 +40,6 @@ public class UserBlockController(IUserService userService) : UserBlockController
     {
         var result = await userService.DeleteBlock(CurrentUserId, user.Username!);
 
-        return result != null ? Ok(result) : new BadRequestResult();
+        return result != null ? Ok(new UserResponse(result, DateTime.UtcNow)) : new BadRequestResult();
     }
 }
