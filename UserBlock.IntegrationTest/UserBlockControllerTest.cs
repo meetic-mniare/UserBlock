@@ -74,7 +74,7 @@ public class UserBlockControllerTest : IntegrationTestBase
         Assert.That(token, Is.Not.Null);
         // Act
         HttpClient!.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-        var userInfo = new UserInfo(AutoFixture.Create<string>(), null);
+        var userInfo = new UserRequest(AutoFixture.Create<string>(), null);
         var jsonContent = JsonContent.Create(userInfo, mediaType: new MediaTypeHeaderValue("application/json"));
         var res = await HttpClient.PostAsync(PostRoute,
             jsonContent);
@@ -95,7 +95,7 @@ public class UserBlockControllerTest : IntegrationTestBase
         Assert.That(token, Is.Not.Null);
         // Act
         HttpClient!.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-        var userInfo = new UserInfo(ValidUserName2, null);
+        var userInfo = new UserRequest(ValidUserName2, null);
         var jsonContent = JsonContent.Create(userInfo, mediaType: new MediaTypeHeaderValue("application/json"));
         var res = await HttpClient.PostAsync(PostRoute,
             jsonContent);
@@ -128,7 +128,7 @@ public class UserBlockControllerTest : IntegrationTestBase
         Assert.That(testedUserDto!.Data?.BlockedUsers, Is.Empty);
 
         // Add blocked user
-        var userInfo = new UserInfo(ValidUserName2, null);
+        var userInfo = new UserRequest(ValidUserName2, null);
         var jsonContent = JsonContent.Create(userInfo, mediaType: new MediaTypeHeaderValue("application/json"));
         var res = await HttpClient.PostAsync(PostRoute,
             jsonContent);

@@ -10,7 +10,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-public class MemoryCacheHandler(RequestDelegate next, IMemoryCache cache, IConfiguration configuration)
+public class MemoryCacheHandlerMiddleware(RequestDelegate next, IMemoryCache cache, IConfiguration configuration)
 {
     private const string CacheKeyPrefix = "UserId_";
 

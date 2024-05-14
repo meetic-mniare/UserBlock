@@ -35,7 +35,7 @@ public class IntegrationTestBase
 
     protected async Task<string?> GenerateToken(string username = ValidUserName, string password = ValidPassword)
     {
-        var userInfo = new UserInfo(username, password);
+        var userInfo = new UserRequest(username, password);
         var jsonContent = JsonContent.Create(userInfo, mediaType: new MediaTypeHeaderValue("application/json"));
         var tokenResult = await HttpClient!.PostAsync("api/authentication/token",
             jsonContent);
@@ -50,7 +50,5 @@ public class IntegrationTestBase
         var token = await GenerateToken(username, password);
         
         HttpClient!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-        // HttpClient?.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
     }
 }

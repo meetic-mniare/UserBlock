@@ -23,5 +23,5 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.UseMiddleware<MemoryCacheHandler>();
+app.UseMiddleware<MemoryCacheHandlerMiddleware>();
 app.Run();

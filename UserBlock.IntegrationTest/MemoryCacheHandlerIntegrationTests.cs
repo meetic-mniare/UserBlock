@@ -37,7 +37,7 @@ public class MemoryCacheHandlerIntegrationTests : IntegrationTestBase
         var initialResponseContent = await initialResponse.Content.ReadAsStringAsync();
 
         // Send a POST request to the server
-        var userInfo = new UserInfo(ValidUserName2, null);
+        var userInfo = new UserRequest(ValidUserName2, null);
         var jsonContent = JsonContent.Create(userInfo, mediaType: new MediaTypeHeaderValue("application/json"));
         var postResponse = await HttpClient.PostAsync(PostRoute, jsonContent);
         postResponse.EnsureSuccessStatusCode();
@@ -55,7 +55,7 @@ public class MemoryCacheHandlerIntegrationTests : IntegrationTestBase
     public async Task Invoke_DeleteRequest_ResetsCache()
     {
         await AddToken();
-        var userInfo = new UserInfo(ValidUserName2, null);
+        var userInfo = new UserRequest(ValidUserName2, null);
         var jsonContent = JsonContent.Create(userInfo, mediaType: new MediaTypeHeaderValue("application/json"));
 
         // Send a GET request to the server to populate cache
@@ -154,11 +154,20 @@ public class MemoryCacheHandlerIntegrationTests : IntegrationTestBase
     [Test]
     public async Task Invoke_ErrorHandling_HandleErrorsGracefully()
     {
-        await AddToken();
-        // Send a GET request to a non-existing endpoint
-        var response = await HttpClient!.GetAsync("/api/nonexisting");
+        try
+        {
+            await AddToken();
+            // Send a GET request to a non-existing endpoint
+            var response = await HttpClient!.GetAsync("/api/nonexisting");
 
-        // Ensure that the response status code indicates a not found error (404)
-        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+            // Ensure that the response status code indicates a not found error (404)
+            Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        
     }
 }

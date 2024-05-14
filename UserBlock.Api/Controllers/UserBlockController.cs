@@ -25,7 +25,7 @@ public class UserBlockController(IUserService userService) : UserBlockController
 
     [HttpPost]
     [Route("BlockUser")]
-    public async Task<IActionResult> BlockUser([FromBody] UserInfo user)
+    public async Task<IActionResult> BlockUser([FromBody] UserRequest user)
     {
         var result = await userService.BlockUser(CurrentUserId, user.Username!);
 
@@ -36,7 +36,7 @@ public class UserBlockController(IUserService userService) : UserBlockController
 
     [HttpDelete]
     [Route("UnblockUser")]
-    public async Task<IActionResult> UnblockUser([FromBody] UserInfo user)
+    public async Task<IActionResult> UnblockUser([FromBody] UserRequest user)
     {
         var result = await userService.DeleteBlock(CurrentUserId, user.Username!);
 

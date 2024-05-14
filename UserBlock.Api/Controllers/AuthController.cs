@@ -12,7 +12,7 @@ public class AuthController(IUserService userService, IJwtService jwtService) : 
 {
     [HttpPost]
     [Route("token")]
-    public async Task<IActionResult> Token([FromBody] UserInfo user)
+    public async Task<IActionResult> Token([FromBody] UserRequest user)
     {
         var storedUser = await userService.GetUser(user?.Username);
 
