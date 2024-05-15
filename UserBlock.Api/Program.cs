@@ -8,10 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddExternalServices();
 builder.Services.AddApplication();
 builder.Services.AddConfigureAuthentication(builder.Configuration);
 builder.Services.AddInfrastructure();
-builder.Services.AddExternalServices();
 
 var app = builder.Build();
 

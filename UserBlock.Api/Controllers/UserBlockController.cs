@@ -24,6 +24,7 @@ public class UserBlockController(IUserService userService) : UserBlockController
     }
 
     [HttpPost]
+    [Authorize(Policy = "BillingClientApiPolicy")]
     [Route("BlockUser")]
     public async Task<IActionResult> BlockUser([FromBody] UserRequest user)
     {
@@ -35,6 +36,7 @@ public class UserBlockController(IUserService userService) : UserBlockController
     }
 
     [HttpDelete]
+    [Authorize(Policy = "BillingClientApiPolicy")]
     [Route("UnblockUser")]
     public async Task<IActionResult> UnblockUser([FromBody] UserRequest user)
     {

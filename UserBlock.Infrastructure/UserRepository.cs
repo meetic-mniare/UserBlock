@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UserBlock.Application.Interfaces;
 using UserBlock.Contracts;
@@ -16,7 +13,7 @@ public class UserRepository : IUserRepository
     {
         var initialUsers = new List<User>
         {
-            new User(Guid.NewGuid(), "user1", BCrypt.Net.BCrypt.HashPassword("password1"), "user1@gmail.com",
+            new(Guid.NewGuid(), "user1", BCrypt.Net.BCrypt.HashPassword("password1"), "user1@gmail.com",
                 []),
             new User(Guid.NewGuid(), "user2", BCrypt.Net.BCrypt.HashPassword("password2"), "user2@gmail.com",
                 [])

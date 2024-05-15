@@ -2,5 +2,5 @@
 
 public interface IBillingClientApi
 {
-    Task<UserFeatureBitMask> GetUserFeaturesAsync(string userId, CancellationToken ctx);
+    Task<UserFeatureBitMask> GetUserFeaturesAsync();
 }

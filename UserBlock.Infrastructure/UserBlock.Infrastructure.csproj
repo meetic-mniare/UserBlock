@@ -14,12 +14,16 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Corp.Billing.Shared\Corp.Billing.Shared.csproj" />
       <ProjectReference Include="..\UserBlock.Application\UserBlock.Application.csproj" />
       <ProjectReference Include="..\UserBlock.Contracts\UserBlock.Contracts.csproj" />
       <ProjectReference Include="..\UserBlock.Domain\UserBlock.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Authorization">
+        <HintPath>..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.4\Microsoft.AspNetCore.Authorization.dll</HintPath>
+      </Reference>
       <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
         <HintPath>..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.4\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
       </Reference>

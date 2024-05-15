@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using UserBlock.Application.Interfaces;
 using UserBlock.Contracts;
 
@@ -23,6 +21,7 @@ public sealed class UserService(IUserRepository userRepository) : IUserService
     
     public Task<UserDto?> BlockUser(Guid? userId, string? username)
     {
+        
         ArgumentNullException.ThrowIfNull(userId);
         ArgumentNullException.ThrowIfNull(username);
 

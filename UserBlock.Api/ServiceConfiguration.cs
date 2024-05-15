@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using UserBlock.Application;
+using UserBlock.Infrastructure;
 
 namespace UserBlock.Api;
 
@@ -28,9 +29,11 @@ public static class ServiceConfiguration
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key!))
                 };
             });
+        
+        services.AddSingleton<IAuthorizationHandler, BillingClientApiAuthorizationHandler>();
         services.AddAuthorizationBuilder()
-            .SetDefaultPolicy(new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
-                .RequireAuthenticatedUser().Build());
+                    .AddPolicy("BillingClientApiPolicy", policy =>
+                policy.Requirements.Add(new BillingRequirement()));
         return services;
     }
 }

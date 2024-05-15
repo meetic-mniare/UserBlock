@@ -26,6 +26,27 @@ public class MemoryCacheHandlerIntegrationTests : IntegrationTestBase
         // Assert that the second response matches the first response (indicating cached response)
         Assert.That(responseContent2, Is.EqualTo(responseContent1));
     }
+    
+    [Test]
+    public async Task Invoke_GetRequest_CacheSkippedInHeader_ReturnsNewResponse()
+    {
+        // Send a GET request to the server
+        await AddToken();
+        var response1 = await HttpClient!.GetAsync(GetRoute);
+        response1.EnsureSuccessStatusCode();
+        var responseContent1 = await response1.Content.ReadAsStringAsync();
+
+        // Send another GET request to the same endpoint and skip cache
+        HttpClient.DefaultRequestHeaders.Add("X-Skip-Cache", "yes");
+        var response2 = await HttpClient.GetAsync(GetRoute);
+        response2.EnsureSuccessStatusCode();
+        var responseContent2 = await response2.Content.ReadAsStringAsync();
+
+        HttpClient.DefaultRequestHeaders.Remove("X-Skip-Cache");
+
+        // Assert that the second response matches the first response (indicating cached response)
+        Assert.That(responseContent2, Is.Not.EqualTo(responseContent1));
+    }
 
     [Test]
     public async Task Invoke_PostRequest_ResetsCache()
