@@ -10,6 +10,8 @@ public static class InfrastructureConfiguration
     {
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddHttpClient<LocalizationApiClient>();
+        services.AddTransient<ILocalizationApiClient, LocalizationApiClient>();
         services.AddDbContext<UserDbContext>(options =>
             {
                 options.UseInMemoryDatabase(databaseName: "UserDb");

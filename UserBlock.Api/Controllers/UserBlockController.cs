@@ -9,30 +9,47 @@ namespace UserBlock.Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/userBlock")]
-public class UserBlockController(IUserService userService) : UserBlockControllerBase
+public class UserBlockController(IUserService userService, ILocalizationApiClient localizationApiClient)
+    : UserBlockControllerBase(localizationApiClient)
 {
     [HttpGet("GetUser")]
     public async Task<IActionResult> GetUser()
     {
-        var user = await userService.GetUser(CurrentUserId);
-        if (user == null)
+        try
         {
-            return NotFound();
-        }
+            // var test = await localizationApiClient.TranslateAsync("Welcome_Message", "es-ES");
+            var user = await userService.GetUser(CurrentUserId);
+            if (user == null)
+            {
+                return NotFound();
+            }
 
-        return Ok(new UserResponse(user, DateTime.UtcNow));
+            return Ok(new UserResponse(user, DateTime.UtcNow));
+        }
+        catch (Exception ex)
+        {
+            return await GetExceptionMessage(ex);
+        }
     }
+
 
     [HttpPost]
     [Authorize(Policy = "BillingClientApiPolicy")]
     [Route("BlockUser")]
     public async Task<IActionResult> BlockUser([FromBody] UserRequest user)
     {
-        var result = await userService.BlockUser(CurrentUserId, user.Username!);
+        try
+        {
+            var result = await userService.BlockUser(CurrentUserId, user.Username!);
 
-        return result != null
-            ? Ok(new UserResponse(result, DateTime.UtcNow))
-            : new BadRequestResult();
+            return result != null
+                ? Ok(new UserResponse(result, DateTime.UtcNow))
+                : new BadRequestResult();
+        }
+        catch (Exception ex)
+        {
+            return await GetExceptionMessage(ex);
+        }
     }
 
     [HttpDelete]
@@ -40,8 +57,15 @@ public class UserBlockController(IUserService userService) : UserBlockController
     [Route("UnblockUser")]
     public async Task<IActionResult> UnblockUser([FromBody] UserRequest user)
     {
-        var result = await userService.DeleteBlock(CurrentUserId, user.Username!);
+        try
+        {
+            var result = await userService.DeleteBlock(CurrentUserId, user.Username!);
 
-        return result != null ? Ok(new UserResponse(result, DateTime.UtcNow)) : new BadRequestResult();
+            return result != null ? Ok(new UserResponse(result, DateTime.UtcNow)) : new BadRequestResult();
+        }
+        catch (Exception ex)
+        {
+            return await GetExceptionMessage(ex);
+        }
     }
 }

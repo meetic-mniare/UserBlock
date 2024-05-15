@@ -1,13 +1,10 @@
 using System.Security.Claims;
-using Microsoft.Extensions.Configuration;
-using UserBlock.Application;
-namespace UserBlock.Infrastructure;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using UserBlock.Application;
+
+namespace UserBlock.Infrastructure.Middleware;
 
 public class MemoryCacheHandlerMiddleware(RequestDelegate next, IMemoryCache cache, IConfiguration configuration)
 {

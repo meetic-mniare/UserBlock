@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using UserBlock.Application;
 using UserBlock.Infrastructure;
+using UserBlock.Infrastructure.Middleware;
 
 namespace UserBlock.Api;
 

@@ -2,6 +2,7 @@ using Corp.Billing.Shared;
 using UserBlock.Api;
 using UserBlock.Application;
 using UserBlock.Infrastructure;
+using UserBlock.Infrastructure.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,4 +27,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.UseMiddleware<MemoryCacheHandlerMiddleware>();
+app.UseMiddleware<AcceptLanguageMiddleware>();
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.Run();

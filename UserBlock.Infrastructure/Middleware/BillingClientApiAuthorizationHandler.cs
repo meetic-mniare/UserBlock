@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Corp.Billing.Shared;
+using Microsoft.AspNetCore.Authorization;
 
-namespace UserBlock.Infrastructure;
+namespace UserBlock.Infrastructure.Middleware;
 
 public class BillingClientApiAuthorizationHandler( IBillingClientApi billingClientApi)
     : AuthorizationHandler<BillingRequirement>
