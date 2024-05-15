@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UserBlock.Application.Interfaces;
 using UserBlock.Contracts;
@@ -38,25 +41,16 @@ public class UserRepository : IUserRepository
 
     public async Task<UserDto?> BlockUser(Guid userId, string userName)
     {
-        try
+        var user = await GetUser(userId);
+        var blockedUser = await GetUser(userName);
+        if (user == null || blockedUser == null)
         {
-            var user = await GetUser(userId);
-            var blockedUser = await GetUser(userName);
-            if (user == null || blockedUser == null)
-            {
-                return null;
-            }
+            return null;
+        }
 
-            user.BlockedUsers?.Add(blockedUser.Id);
-            // _dbContext.Users.Update(user.ToEntity()!);
-            await _dbContext.SaveChangesAsync();
-            return user;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        user.BlockedUsers?.Add(blockedUser.Id);
+        await _dbContext.SaveChangesAsync();
+        return user;
     }
 
     public async Task<UserDto?> DeleteBlock(Guid userId, string blockedUSername)
@@ -69,7 +63,6 @@ public class UserRepository : IUserRepository
         }
 
         user.BlockedUsers?.Remove(blockedUser.Id);
-        // _dbContext.Users.Update(user.ToEntity()!);
         await _dbContext.SaveChangesAsync();
         return user;
     }

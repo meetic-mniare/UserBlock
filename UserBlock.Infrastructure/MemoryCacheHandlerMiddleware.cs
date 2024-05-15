@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using UserBlock.Application;
-
 namespace UserBlock.Infrastructure;
 
 using Microsoft.AspNetCore.Http;
@@ -17,6 +16,11 @@ public class MemoryCacheHandlerMiddleware(RequestDelegate next, IMemoryCache cac
     public async Task Invoke(HttpContext context)
     {
         var cacheKey = CacheKeyPrefix + context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (context.Request.Headers.ContainsKey("X-Skip-Cache"))
+        {
+            await next(context);
+            return;
+        }
 
         if (context.Request.Method.Equals("GET", StringComparison.OrdinalIgnoreCase))
         {

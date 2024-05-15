@@ -1,3 +1,4 @@
+using Corp.Billing.Shared;
 using UserBlock.Api;
 using UserBlock.Application;
 using UserBlock.Infrastructure;
@@ -10,6 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddConfigureAuthentication(builder.Configuration);
 builder.Services.AddInfrastructure();
+builder.Services.AddExternalServices();
 
 var app = builder.Build();
 

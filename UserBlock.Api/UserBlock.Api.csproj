@@ -18,6 +18,7 @@
     </ItemGroup>
     
     <ItemGroup>
+      <ProjectReference Include="..\Corp.Billing.Shared\Corp.Billing.Shared.csproj" />
       <ProjectReference Include="..\UserBlock.Application\UserBlock.Application.csproj" />
       <ProjectReference Include="..\UserBlock.Contracts\UserBlock.Contracts.csproj" />
       <ProjectReference Include="..\UserBlock.Infrastructure\UserBlock.Infrastructure.csproj" />
