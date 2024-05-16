@@ -12,7 +12,7 @@ public class AuthController(IUserService userService, IJwtService jwtService) : 
 {
     [HttpPost]
     [Route("token")]
-    public async Task<IActionResult> Token([FromBody] UserRequest user)
+    public async Task<IActionResult> Token([FromBody] UserRequest? user)
     {
         var storedUser = await userService.GetUser(user?.Username);
 
@@ -20,13 +20,13 @@ public class AuthController(IUserService userService, IJwtService jwtService) : 
         {
             return Unauthorized("Unable to retrieve  user with username " + user?.Username);
         }
-        
+
         if (!userService.IsAuthenticated(user?.Password, storedUser.PasswordHash))
         {
             return Unauthorized();
         }
-        
+
         var tokenString = jwtService.GenerateJwtToken(storedUser);
-        return Ok(new  JwtToken{ Value = tokenString });
+        return Ok(new JwtToken { Value = tokenString });
     }
 }

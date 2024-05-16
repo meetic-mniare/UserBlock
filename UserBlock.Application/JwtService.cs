@@ -10,7 +10,8 @@ namespace UserBlock.Application;
 
 public sealed class JwtService(IOptions<JwtSettings> jwtSettings) : IJwtService
 {
-    private readonly JwtSettings _jwtSettings = jwtSettings.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
+    private readonly JwtSettings _jwtSettings =
+        jwtSettings.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
 
     public string GenerateJwtToken(UserDto? user = null)
     {
@@ -22,7 +23,8 @@ public sealed class JwtService(IOptions<JwtSettings> jwtSettings) : IJwtService
             _jwtSettings.Audience,
             GetClaims(user!.Id.ToString()),
             expires: DateTime.Now.AddMinutes(_jwtSettings.ExpirationInMin.GetValueOrDefault()),
-            signingCredentials: credentials);
+            signingCredentials: credentials
+        );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }

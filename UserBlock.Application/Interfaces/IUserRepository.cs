@@ -1,4 +1,3 @@
-using UserBlock.Contracts;
 using UserBlock.Domain;
 
 namespace UserBlock.Application.Interfaces;

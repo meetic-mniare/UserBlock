@@ -10,13 +10,16 @@ namespace UserBlock.Api;
 
 public static class ServiceConfiguration
 {
-    public static IServiceCollection AddConfigureAuthentication(this IServiceCollection services,
-        ConfigurationManager configuration)
+    public static IServiceCollection AddConfigureAuthentication(
+        this IServiceCollection services,
+        ConfigurationManager configuration
+    )
     {
         var jwtOptionsSection = configuration.GetRequiredSection(AppSettingConstants.JwtSetting);
         services.Configure<JwtSettings>(jwtOptionsSection);
         var jwtSettings = jwtOptionsSection.Get<JwtSettings>();
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -27,14 +30,19 @@ public static class ServiceConfiguration
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = jwtSettings!.Issuer,
                     ValidAudience = jwtSettings.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key!))
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtSettings.Key!)
+                    )
                 };
             });
-        
+
         services.AddSingleton<IAuthorizationHandler, BillingClientApiAuthorizationHandler>();
-        services.AddAuthorizationBuilder()
-                    .AddPolicy("BillingClientApiPolicy", policy =>
-                policy.Requirements.Add(new BillingRequirement()));
+        services
+            .AddAuthorizationBuilder()
+            .AddPolicy(
+                "BillingClientApiPolicy",
+                policy => policy.Requirements.Add(new BillingRequirement())
+            );
         return services;
     }
 }

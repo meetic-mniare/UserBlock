@@ -9,13 +9,13 @@ namespace UserBlock.Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/userBlock")]
-public class UserBlockController(IUserService userService, ILocalizationApiClient localizationApiClient)
-    : UserBlockControllerBase
+// public class UserBlockController(IUserService userService, ILocalizationApiClient localizationApiClient)
+public class UserBlockController(IUserService userService) : UserBlockControllerBase
 {
     [HttpGet("GetUser")]
     public async Task<IActionResult> GetUser()
-    { 
-        var test = await localizationApiClient.TranslateAsync("Welcome_Message", "es-ES");
+    {
+        // var test = await localizationApiClient.TranslateAsync("Welcome_Message", "es-ES");
         var user = await userService.GetUser(CurrentUserId);
         if (user == null)
         {
@@ -24,7 +24,6 @@ public class UserBlockController(IUserService userService, ILocalizationApiClien
 
         return Ok(new UserResponse(user, DateTime.UtcNow));
     }
-
 
     [HttpPost]
     [Authorize(Policy = "BillingClientApiPolicy")]
@@ -45,6 +44,8 @@ public class UserBlockController(IUserService userService, ILocalizationApiClien
     {
         var result = await userService.DeleteBlock(CurrentUserId, user.Username!);
 
-        return result != null ? Ok(new UserResponse(result, DateTime.UtcNow)) : new BadRequestResult();
+        return result != null
+            ? Ok(new UserResponse(result, DateTime.UtcNow))
+            : new BadRequestResult();
     }
 }

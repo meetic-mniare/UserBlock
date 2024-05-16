@@ -6,14 +6,18 @@ using UserBlock.Application;
 
 namespace UserBlock.Infrastructure.Middleware;
 
-public class MemoryCacheHandlerMiddleware(RequestDelegate next, IMemoryCache cache, IConfiguration configuration)
+public class MemoryCacheHandlerMiddleware(
+    RequestDelegate next,
+    IMemoryCache cache,
+    IConfiguration configuration
+)
 {
     private const string CacheKeyPrefix = "UserId_";
 
     public async Task Invoke(HttpContext context)
     {
         var cacheKey = CacheKeyPrefix + context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        
+
         if (context.Request.Method.Equals("GET", StringComparison.OrdinalIgnoreCase))
         {
             if (context.Request.Headers.ContainsKey("X-Skip-Cache"))
@@ -34,7 +38,9 @@ public class MemoryCacheHandlerMiddleware(RequestDelegate next, IMemoryCache cac
                     await responseBody.CopyToAsync(originalBodyStream);
                 }
 
-                var cacheTimeoutInMinute = configuration.GetValue<double>(AppSettingConstants.CacheTimeoutInMinutes);
+                var cacheTimeoutInMinute = configuration.GetValue<double>(
+                    AppSettingConstants.CacheTimeoutInMinutes
+                );
                 cache.Set(cacheKey, cachedResponse, TimeSpan.FromMinutes(cacheTimeoutInMinute));
             }
             else
@@ -43,8 +49,10 @@ public class MemoryCacheHandlerMiddleware(RequestDelegate next, IMemoryCache cac
                 await context.Response.WriteAsync(cachedResponse!);
             }
         }
-        else if (context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase) ||
-                 context.Request.Method.Equals("DELETE", StringComparison.OrdinalIgnoreCase))
+        else if (
+            context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase)
+            || context.Request.Method.Equals("DELETE", StringComparison.OrdinalIgnoreCase)
+        )
         {
             await next(context);
             cache.Remove(cacheKey);

@@ -56,8 +56,10 @@ public class UserBlockControllerTest : IntegrationTestBase
         Assert.That(token, Is.Null);
         // Act
         HttpClient!.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-        var res = await HttpClient.PostAsync(PostRoute,
-            new StringContent(ValidUserName2, Encoding.UTF8, "application/json"));
+        var res = await HttpClient.PostAsync(
+            PostRoute,
+            new StringContent(ValidUserName2, Encoding.UTF8, "application/json")
+        );
         Assert.Multiple(() =>
         {
             // Assert
@@ -75,9 +77,11 @@ public class UserBlockControllerTest : IntegrationTestBase
         // Act
         HttpClient!.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
         var userInfo = new UserRequest(AutoFixture.Create<string>(), null);
-        var jsonContent = JsonContent.Create(userInfo, mediaType: new MediaTypeHeaderValue("application/json"));
-        var res = await HttpClient.PostAsync(PostRoute,
-            jsonContent);
+        var jsonContent = JsonContent.Create(
+            userInfo,
+            mediaType: new MediaTypeHeaderValue("application/json")
+        );
+        var res = await HttpClient.PostAsync(PostRoute, jsonContent);
 
         Assert.Multiple(() =>
         {
@@ -96,9 +100,11 @@ public class UserBlockControllerTest : IntegrationTestBase
         // Act
         HttpClient!.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
         var userInfo = new UserRequest(ValidUserName2, null);
-        var jsonContent = JsonContent.Create(userInfo, mediaType: new MediaTypeHeaderValue("application/json"));
-        var res = await HttpClient.PostAsync(PostRoute,
-            jsonContent);
+        var jsonContent = JsonContent.Create(
+            userInfo,
+            mediaType: new MediaTypeHeaderValue("application/json")
+        );
+        var res = await HttpClient.PostAsync(PostRoute, jsonContent);
 
         var userDto = await res.Content.ReadFromJsonAsync<UserResponse>();
 
@@ -112,7 +118,6 @@ public class UserBlockControllerTest : IntegrationTestBase
         });
     }
 
-
     [Test]
     // [Ignore("Manual test to ensure context is up to date")]
     public async Task Delete_AuthenticatedUserAndValidUserToBlock_ReturnsOk()
@@ -123,15 +128,18 @@ public class UserBlockControllerTest : IntegrationTestBase
         //Verify that user is not blocked
         HttpClient!.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
 
-        var testedUserDto =
-            await (await HttpClient.GetAsync(GetRoute)).Content.ReadFromJsonAsync<UserResponse>();
+        var testedUserDto = await (
+            await HttpClient.GetAsync(GetRoute)
+        ).Content.ReadFromJsonAsync<UserResponse>();
         Assert.That(testedUserDto!.Data?.BlockedUsers, Is.Empty);
 
         // Add blocked user
         var userInfo = new UserRequest(ValidUserName2, null);
-        var jsonContent = JsonContent.Create(userInfo, mediaType: new MediaTypeHeaderValue("application/json"));
-        var res = await HttpClient.PostAsync(PostRoute,
-            jsonContent);
+        var jsonContent = JsonContent.Create(
+            userInfo,
+            mediaType: new MediaTypeHeaderValue("application/json")
+        );
+        var res = await HttpClient.PostAsync(PostRoute, jsonContent);
 
         var userDto = await res.Content.ReadFromJsonAsync<UserResponse>();
         Assert.That(res, Is.Not.Null);
@@ -143,10 +151,12 @@ public class UserBlockControllerTest : IntegrationTestBase
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Delete,
-            RequestUri =
-                new Uri(DeleteRoute,
-                    UriKind.Relative), // Replace "resource" with your resource endpoint
-            Content = new StringContent(JsonConvert.SerializeObject(userInfo), Encoding.UTF8, "application/json")
+            RequestUri = new Uri(DeleteRoute, UriKind.Relative), // Replace "resource" with your resource endpoint
+            Content = new StringContent(
+                JsonConvert.SerializeObject(userInfo),
+                Encoding.UTF8,
+                "application/json"
+            )
         };
         var response = await HttpClient.SendAsync(request);
 

@@ -1,22 +1,31 @@
 using Microsoft.EntityFrameworkCore;
 using UserBlock.Application.Interfaces;
-using UserBlock.Contracts;
 using UserBlock.Domain;
 
 namespace UserBlock.Infrastructure;
 
-public class UserRepository : IUserRepository
+internal class UserRepository : IUserRepository
 {
     private readonly UserDbContext _dbContext;
 
-    public UserRepository(UserDbContext dbContext)
+    internal UserRepository(UserDbContext dbContext)
     {
         var initialUsers = new List<User>
         {
-            new(Guid.NewGuid(), "user1", BCrypt.Net.BCrypt.HashPassword("password1"), "user1@gmail.com",
-                []),
-            new User(Guid.NewGuid(), "user2", BCrypt.Net.BCrypt.HashPassword("password2"), "user2@gmail.com",
-                [])
+            new(
+                Guid.NewGuid(),
+                "user1",
+                BCrypt.Net.BCrypt.HashPassword("password1"),
+                "user1@gmail.com",
+                []
+            ),
+            new User(
+                Guid.NewGuid(),
+                "user2",
+                BCrypt.Net.BCrypt.HashPassword("password2"),
+                "user2@gmail.com",
+                []
+            )
         };
         dbContext.Users.AddRange(initialUsers);
         dbContext.SaveChanges();
@@ -26,7 +35,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUser(string username)
     {
-       return await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
+        return await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
 
     public async Task<User?> GetUser(Guid userId)
@@ -48,10 +57,10 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<User?> DeleteBlock(Guid userId, string blockedUSername)
+    public async Task<User?> DeleteBlock(Guid userId, string blockedUserName)
     {
         var user = await GetUser(userId);
-        var blockedUser = await GetUser(blockedUSername);
+        var blockedUser = await GetUser(blockedUserName);
         if (user == null || blockedUser == null)
         {
             return null;

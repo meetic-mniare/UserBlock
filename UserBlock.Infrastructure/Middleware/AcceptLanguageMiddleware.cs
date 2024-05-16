@@ -7,7 +7,8 @@ public class AcceptLanguageMiddleware(RequestDelegate next, IConfiguration confi
 {
     public async Task InvokeAsync(HttpContext context)
     {
-        var defaultAcceptLanguage = configuration.GetValue<string>("defaultAcceptLanguage") ?? "en-US";
+        var defaultAcceptLanguage =
+            configuration.GetValue<string>("defaultAcceptLanguage") ?? "en-US";
         var acceptLanguage = context.Request.Headers["Accept-Language"].ToString();
         if (string.IsNullOrEmpty(acceptLanguage))
         {

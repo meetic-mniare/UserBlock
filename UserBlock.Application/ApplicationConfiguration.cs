@@ -7,7 +7,6 @@ public static class ApplicationConfiguration
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-
         services.AddTransient<IJwtService, JwtService>();
         return services;
     }

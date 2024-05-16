@@ -26,7 +26,7 @@ public class MemoryCacheHandlerIntegrationTests : IntegrationTestBase
         // Assert that the second response matches the first response (indicating cached response)
         Assert.That(responseContent2, Is.EqualTo(responseContent1));
     }
-    
+
     [Test]
     public async Task Invoke_GetRequest_CacheSkippedInHeader_ReturnsNewResponse()
     {
@@ -59,7 +59,10 @@ public class MemoryCacheHandlerIntegrationTests : IntegrationTestBase
 
         // Send a POST request to the server
         var userInfo = new UserRequest(ValidUserName2, null);
-        var jsonContent = JsonContent.Create(userInfo, mediaType: new MediaTypeHeaderValue("application/json"));
+        var jsonContent = JsonContent.Create(
+            userInfo,
+            mediaType: new MediaTypeHeaderValue("application/json")
+        );
         var postResponse = await HttpClient.PostAsync(PostRoute, jsonContent);
         postResponse.EnsureSuccessStatusCode();
 
@@ -77,14 +80,17 @@ public class MemoryCacheHandlerIntegrationTests : IntegrationTestBase
     {
         await AddToken();
         var userInfo = new UserRequest(ValidUserName2, null);
-        var jsonContent = JsonContent.Create(userInfo, mediaType: new MediaTypeHeaderValue("application/json"));
+        var jsonContent = JsonContent.Create(
+            userInfo,
+            mediaType: new MediaTypeHeaderValue("application/json")
+        );
 
         // Send a GET request to the server to populate cache
         var initialResponse = await HttpClient!.GetAsync(GetRoute);
         initialResponse.EnsureSuccessStatusCode();
         var initialResponseContent = await initialResponse.Content.ReadAsStringAsync();
 
-        //Add bloked user 
+        //Add bloked user
         var blockResponse = await HttpClient.PostAsync(PostRoute, jsonContent);
         blockResponse.EnsureSuccessStatusCode();
         var blockResponseContent = await blockResponse.Content.ReadAsStringAsync();
@@ -92,14 +98,16 @@ public class MemoryCacheHandlerIntegrationTests : IntegrationTestBase
         // Initial response content should be different from the entity after block update
         Assert.That(blockResponseContent, Is.Not.EqualTo(initialResponseContent));
 
-        // Send a DELETE request 
+        // Send a DELETE request
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Delete,
-            RequestUri =
-                new Uri(DeleteRoute,
-                    UriKind.Relative),
-            Content = new StringContent(JsonConvert.SerializeObject(userInfo), Encoding.UTF8, "application/json")
+            RequestUri = new Uri(DeleteRoute, UriKind.Relative),
+            Content = new StringContent(
+                JsonConvert.SerializeObject(userInfo),
+                Encoding.UTF8,
+                "application/json"
+            )
         };
         var deleteResponse = await HttpClient.SendAsync(request);
         deleteResponse.EnsureSuccessStatusCode();
@@ -189,6 +197,5 @@ public class MemoryCacheHandlerIntegrationTests : IntegrationTestBase
             Console.WriteLine(e);
             throw;
         }
-        
     }
 }

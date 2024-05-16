@@ -18,10 +18,9 @@ public sealed class UserService(IUserRepository userRepository) : IUserService
 
         return (await userRepository.GetUser(username)).ToUserDto();
     }
-    
+
     public async Task<UserDto?> BlockUser(Guid? userId, string? username)
     {
-        
         ArgumentNullException.ThrowIfNull(userId);
         ArgumentNullException.ThrowIfNull(username);
 
@@ -35,7 +34,6 @@ public sealed class UserService(IUserRepository userRepository) : IUserService
 
         return (await userRepository.DeleteBlock(userId.Value, blokedUsername)).ToUserDto();
     }
-    
 
     public bool IsAuthenticated(string? password, string? passwordHash)
     {

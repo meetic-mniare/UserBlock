@@ -15,5 +15,4 @@ public class UserBlockControllerBase : ControllerBase
                 : throw new ArgumentNullException("userId");
         }
     }
-    
 }

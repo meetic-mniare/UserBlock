@@ -2,5 +2,5 @@ namespace UserBlock.Contracts;
 
 public struct JwtToken
 {
-    public  string Value { get; set; }
+    public string Value { get; init; }
 }
