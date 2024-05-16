@@ -30,7 +30,7 @@ public class GlobalExceptionHandlerMiddleware(
 
     private  Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        var code = HttpStatusCode.InternalServerError;
+        const HttpStatusCode code = HttpStatusCode.InternalServerError;
         var message = exception.Message;
         var translatedMessage = localizationApiClient.TranslateAsync(message, CultureInfo.CurrentCulture.Name)
             .GetAwaiter().GetResult();

@@ -9,13 +9,13 @@ namespace UserBlock.Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/userBlock")]
-public class UserBlockController(IUserService userService)
+public class UserBlockController(IUserService userService, ILocalizationApiClient localizationApiClient)
     : UserBlockControllerBase
 {
     [HttpGet("GetUser")]
     public async Task<IActionResult> GetUser()
-    {
-        // var test = await localizationApiClient.TranslateAsync("Welcome_Message", "es-ES");
+    { 
+        var test = await localizationApiClient.TranslateAsync("Welcome_Message", "es-ES");
         var user = await userService.GetUser(CurrentUserId);
         if (user == null)
         {

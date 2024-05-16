@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddExternalServices();
 builder.Services.AddApplication();
 builder.Services.AddConfigureAuthentication(builder.Configuration);
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
