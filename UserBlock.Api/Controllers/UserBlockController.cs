@@ -9,27 +9,20 @@ namespace UserBlock.Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/userBlock")]
-public class UserBlockController(IUserService userService, ILocalizationApiClient localizationApiClient)
-    : UserBlockControllerBase(localizationApiClient)
+public class UserBlockController(IUserService userService)
+    : UserBlockControllerBase
 {
     [HttpGet("GetUser")]
     public async Task<IActionResult> GetUser()
     {
-        try
+        // var test = await localizationApiClient.TranslateAsync("Welcome_Message", "es-ES");
+        var user = await userService.GetUser(CurrentUserId);
+        if (user == null)
         {
-            // var test = await localizationApiClient.TranslateAsync("Welcome_Message", "es-ES");
-            var user = await userService.GetUser(CurrentUserId);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            return NotFound();
+        }
 
-            return Ok(new UserResponse(user, DateTime.UtcNow));
-        }
-        catch (Exception ex)
-        {
-            return await GetExceptionMessage(ex);
-        }
+        return Ok(new UserResponse(user, DateTime.UtcNow));
     }
 
 
@@ -38,18 +31,11 @@ public class UserBlockController(IUserService userService, ILocalizationApiClien
     [Route("BlockUser")]
     public async Task<IActionResult> BlockUser([FromBody] UserRequest user)
     {
-        try
-        {
-            var result = await userService.BlockUser(CurrentUserId, user.Username!);
+        var result = await userService.BlockUser(CurrentUserId, user.Username!);
 
-            return result != null
-                ? Ok(new UserResponse(result, DateTime.UtcNow))
-                : new BadRequestResult();
-        }
-        catch (Exception ex)
-        {
-            return await GetExceptionMessage(ex);
-        }
+        return result != null
+            ? Ok(new UserResponse(result, DateTime.UtcNow))
+            : new BadRequestResult();
     }
 
     [HttpDelete]
@@ -57,15 +43,8 @@ public class UserBlockController(IUserService userService, ILocalizationApiClien
     [Route("UnblockUser")]
     public async Task<IActionResult> UnblockUser([FromBody] UserRequest user)
     {
-        try
-        {
-            var result = await userService.DeleteBlock(CurrentUserId, user.Username!);
+        var result = await userService.DeleteBlock(CurrentUserId, user.Username!);
 
-            return result != null ? Ok(new UserResponse(result, DateTime.UtcNow)) : new BadRequestResult();
-        }
-        catch (Exception ex)
-        {
-            return await GetExceptionMessage(ex);
-        }
+        return result != null ? Ok(new UserResponse(result, DateTime.UtcNow)) : new BadRequestResult();
     }
 }

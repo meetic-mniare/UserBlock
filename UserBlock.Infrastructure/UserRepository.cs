@@ -24,19 +24,17 @@ public class UserRepository : IUserRepository
         _dbContext = dbContext;
     }
 
-    public async Task<UserDto?> GetUser(string username)
+    public async Task<User?> GetUser(string username)
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
-        return user.ToUserDto();
+       return await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
 
-    public async Task<UserDto?> GetUser(Guid userId)
+    public async Task<User?> GetUser(Guid userId)
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
-        return user.ToUserDto();
+        return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
     }
 
-    public async Task<UserDto?> BlockUser(Guid userId, string userName)
+    public async Task<User?> BlockUser(Guid userId, string userName)
     {
         var user = await GetUser(userId);
         var blockedUser = await GetUser(userName);
@@ -50,7 +48,7 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<UserDto?> DeleteBlock(Guid userId, string blockedUSername)
+    public async Task<User?> DeleteBlock(Guid userId, string blockedUSername)
     {
         var user = await GetUser(userId);
         var blockedUser = await GetUser(blockedUSername);

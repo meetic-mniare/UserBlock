@@ -5,35 +5,35 @@ namespace UserBlock.Infrastructure;
 
 public sealed class UserService(IUserRepository userRepository) : IUserService
 {
-    public Task<UserDto?> GetUser(Guid? userId)
+    public async Task<UserDto?> GetUser(Guid? userId)
     {
         ArgumentNullException.ThrowIfNull(userId);
 
-        return userRepository.GetUser(userId.Value);
+        return (await userRepository.GetUser(userId.Value)).ToUserDto();
     }
 
-    public Task<UserDto?> GetUser(string? username)
+    public async Task<UserDto?> GetUser(string? username)
     {
         ArgumentNullException.ThrowIfNull(username);
 
-        return userRepository.GetUser(username);
+        return (await userRepository.GetUser(username)).ToUserDto();
     }
     
-    public Task<UserDto?> BlockUser(Guid? userId, string? username)
+    public async Task<UserDto?> BlockUser(Guid? userId, string? username)
     {
         
         ArgumentNullException.ThrowIfNull(userId);
         ArgumentNullException.ThrowIfNull(username);
 
-        return userRepository.BlockUser(userId.Value, username);
+        return (await userRepository.BlockUser(userId.Value, username)).ToUserDto();
     }
 
-    public Task<UserDto?> DeleteBlock(Guid? userId, string? blokedUsername)
+    public async Task<UserDto?> DeleteBlock(Guid? userId, string? blokedUsername)
     {
         ArgumentNullException.ThrowIfNull(userId);
         ArgumentNullException.ThrowIfNull(blokedUsername);
 
-        return userRepository.DeleteBlock(userId.Value, blokedUsername);
+        return (await userRepository.DeleteBlock(userId.Value, blokedUsername)).ToUserDto();
     }
     
 
